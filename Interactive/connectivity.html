@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connectivity Services - AZ-700 Study Guide</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    
+    <style>
+        :root {
+            --azure-blue: #0078D4;
+            --deep-navy: #1B4F72;
+            --bright-cyan: #00BCF2;
+            --light-gray: #F8F9FA;
+            --charcoal: #2D3748;
+            --success-green: #107C10;
+            --warning-orange: #FF8C00;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: var(--charcoal);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--success-green) 0%, var(--deep-navy) 100%);
+            color: white;
+            padding: 80px 0 60px;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            margin: 24px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .service-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            border-left: 4px solid var(--success-green);
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .comparison-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .network-diagram {
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+            background: white;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .practice-question {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 16px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .option:hover {
+            border-color: var(--azure-blue);
+            background: #e3f2fd;
+        }
+        
+        .option.selected {
+            border-color: var(--azure-blue);
+            background: var(--azure-blue);
+            color: white;
+        }
+        
+        .option.correct {
+            border-color: var(--success-green);
+            background: var(--success-green);
+            color: white;
+        }
+        
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #dc3545;
+            color: white;
+        }
+        
+        .explanation {
+            display: none;
+            background: #f0f8ff;
+            border-left: 4px solid var(--azure-blue);
+            padding: 16px;
+            margin-top: 16px;
+            border-radius: 8px;
+        }
+        
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .tab-container {
+            margin: 24px 0;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .tab-button {
+            padding: 12px 24px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .tab-button.active {
+            background: var(--success-green);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .breadcrumb {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+        
+        .feature-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            border-left: 3px solid var(--azure-blue);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-xl font-bold text-gray-900">AZ-700 Study Guide</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
+                    <a href="core-networking.html" class="text-gray-700 hover:text-blue-600 font-medium">Core Networking</a>
+                    <a href="connectivity.html" class="text-blue-600 hover:text-blue-800 font-medium">Connectivity</a>
+                    <a href="application-delivery.html" class="text-gray-700 hover:text-blue-600 font-medium">App Delivery</a>
+                    <a href="security.html" class="text-gray-700 hover:text-blue-600 font-medium">Security</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center fade-in-up">
+                <h1 class="text-4xl font-bold mb-4">Connectivity Services</h1>
+                <p class="text-xl text-gray-200 max-w-3xl mx-auto">
+                    Master hybrid connectivity solutions including VPN Gateways, ExpressRoute, Virtual WAN, 
+                    and site-to-site connectivity. This section represents 20-25% of the AZ-700 exam.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Breadcrumb -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+        <div class="breadcrumb">
+            <nav class="flex" aria-label="Breadcrumb">
+                <ol class="flex items-center space-x-4">
+                    <li><a href="index.html" class="text-gray-500 hover:text-blue-600">Home</a></li>
+                    <li><span class="text-gray-400">/</span></li>
+                    <li><span class="text-gray-900 font-medium">Connectivity Services</span></li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- VPN Gateway Section -->
+        <div class="content-section fade-in-up">
+            <h2 class="text-2xl font-bold mb-6">VPN Gateway</h2>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" data-tab="vpn-overview">Overview</button>
+                    <button class="tab-button" data-tab="site-to-site">Site-to-Site</button>
+                    <button class="tab-button" data-tab="point-to-site">Point-to-Site</button>
+                    <button class="tab-button" data-tab="vpn-skus">SKUs & Performance</button>
+                </div>
+                
+                <div id="vpn-overview" class="tab-content active">
+                    <h3 class="text-xl font-semibold mb-4">VPN Gateway Overview</h3>
+                    <p class="mb-4">
+                        Azure VPN Gateway enables you to create secure cross-premises connectivity between your Azure VNet and on-premises locations. 
+                        It supports both site-to-site and point-to-site connections.
+                    </p>
+                    
+                    <div class="service-card">
+                        <h4 class="font-semibold mb-2">Key Features</h4>
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <h5 class="font-semibold">High Availability</h5>
+                                <p class="text-sm">Active-Active and Zone Redundant options</p>
+                            </div>
+                            <div class="feature-card">
+                                <h5 class="font-semibold">Multiple VPN Types</h5>
+                                <p class="text-sm">Policy-based and Route-based VPNs</p>
+                            </div>
+                            <div class="feature-card">
+                                <h5 class="font-semibold">Multiple Protocols</h5>
+                                <p class="text-sm">IPsec, IKEv2, SSTP, OpenVPN</p>
+                            </div>
+                            <div class="feature-card">
+                                <h5 class="font-semibold">Scalability</h5>
+                                <p class="text-sm">Multiple SKUs for different performance needs</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="network-diagram" id="vpn-topology"></div>
+                    <p class="mt-4 text-sm text-gray-600">
+                        VPN Gateway topology showing site-to-site and point-to-site connections
+                    </p>
+                </div>
+                
+                <div id="site-to-site" class="tab-content">
+                    <h3 class="text-xl font-semibold mb-4">Site-to-Site VPN</h3>
+                    <p class="mb-4">
+                        Site-to-Site VPN creates an encrypted connection between your on-premises network and Azure VNet over the internet.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <div class="service-card">
+                                <h4 class="font-semibold mb-2">Configuration Steps</h4>
+                                <ol class="list-decimal list-inside space-y-1">
+                                    <li>Create Virtual Network and Gateway Subnet</li>
+                                    <li>Create Local Network Gateway</li>
+                                    <li>Create VPN Gateway</li>
+                                    <li>Create VPN Connection</li>
+                                    <li>Configure On-premises VPN Device</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="code-block">
+# Create Local Network Gateway
+az network local-gateway create \
+  --name MyLocalGateway \
+  --resource-group MyResourceGroup \
+  --gateway-ip-address 203.0.113.1 \
+  --local-address-prefixes 192.168.0.0/24 \
+  --location eastus
+
+# Create VPN Connection
+az network vpn-connection create \
+  --name MyVPNConnection \
+  --resource-group MyResourceGroup \
+  --vnet-gateway1 MyVPNGateway \
+  --local-gateway2 MyLocalGateway \
+  --shared-key "YourSharedKey123!"
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold mb-3">VPN Device Requirements</h4>
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>Requirement</th>
+                                        <th>Specification</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Public IP</td>
+                                        <td>Static, Public IPv4</td>
+                                    </tr>
+                                    <tr>
+                                        <td>IKE Version</td>
+                                        <td> IKEv1 or IKEv2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Encryption</td>
+                                        <td>AES-256, SHA-256</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Authentication</td>
+                                        <td>Pre-shared Key</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="point-to-site" class="tab-content">
+                    <h3 class="text-xl font-semibold mb-4">Point-to-Site VPN</h3>
+                    <p class="mb-4">
+                        Point-to-Site VPN allows individual clients to connect securely to your Azure VNet from anywhere.
+                    </p>
+                    
+                    <div class="service-card">
+                        <h4 class="font-semibold mb-2">Authentication Methods</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <h5 class="font-semibold text-sm">RADIUS Authentication</h5>
+                                <p class="text-sm text-gray-600">Integrate with existing RADIUS servers</p>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-sm">Certificate Authentication</h5>
+                                <p class="text-sm text-gray-600">Client certificates for authentication</p>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-sm">Azure AD Authentication</h5>
+                                <p class="text-sm text-gray-600">Use Azure Active Directory credentials</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="code-block">
+# Configure Point-to-Site VPN
+az network vnet-gateway update \
+  --name MyVPNGateway \
+  --resource-group MyResourceGroup \
+  --address-prefixes 172.16.0.0/24 \
+  --client-protocol IkeV2 \
+  --aad-tenant https://login.microsoftonline.com/yourtenant \
+  --aad-audience 41b23e61-6c1e-4545-b367-cd054e0ed4b4 \
+  --aad-issuer https://sts.windows.net/yourtenant/
+                    </div>
+                </div>
+                
+                <div id="vpn-skus" class="tab-content">
+                    <h3 class="text-xl font-semibold mb-4">VPN Gateway SKUs</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>SKU</th>
+                                <th>Bandwidth</th>
+                                <th>Tunnels</th>
+                                <th>Active-Active</th>
+                                <th>Zone Redundant</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Basic</td>
+                                <td>100 Mbps</td>
+                                <td>10</td>
+                                <td>No</td>
+                                <td>No</td>
+                            </tr>
+                            <tr>
+                                <td>VpnGw1</td>
+                                <td>650 Mbps</td>
+                                <td>30</td>
+                                <td>No</td>
+                                <td>No</td>
+                            </tr>
+                            <tr>
+                                <td>VpnGw2</td>
+                                <td>1 Gbps</td>
+                                <td>30</td>
+                                <td>Yes</td>
+                                <td>No</td>
+                            </tr>
+                            <tr>
+                                <td>VpnGw3</td>
+                                <td>1.25 Gbps</td>
+                                <td>30</td>
+                                <td>Yes</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>VpnGw4</td>
+                                <td>2.5 Gbps</td>
+                                <td>100</td>
+                                <td>Yes</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>VpnGw5</td>
+                                <td>5 Gbps</td>
+                                <td>100</td>
+                                <td>Yes</td>
+                                <td>Yes</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ExpressRoute Section -->
+        <div class="content-section fade-in-up">
+            <h2 class="text-2xl font-bold mb-6">ExpressRoute</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <p class="mb-4">
+                        ExpressRoute provides private, dedicated network connectivity from your on-premises infrastructure to Azure. 
+                        It offers higher reliability, faster speeds, and lower latencies than typical internet connections.
+                    </p>
+                    
+                    <div class="service-card">
+                        <h4 class="font-semibold mb-2">ExpressRoute Benefits</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Private connectivity (not over internet)</li>
+                            <li>High throughput and low latency</li>
+                            <li>Layer 3 connectivity</li>
+                            <li>99.95% availability SLA</li>
+                            <li>Global reach capabilities</li>
+                            <li>Better security and compliance</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="service-card">
+                        <h4 class="font-semibold mb-2">ExpressRoute Models</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong>ExpressRoute Direct:</strong> 10 Gbps or 100 Gbps direct connectivity</li>
+                            <li><strong>ExpressRoute Partner:</strong> Through connectivity provider</li>
+                            <li><strong>ExpressRoute Local:</strong> Cost-effective for data center proximity</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">ExpressRoute Peering Types</h3>
+                    <div class="space-y-4">
+                        <div class="service-card">
+                            <h4 class="font-semibold">Private Peering</h4>
+                            <p class="text-sm text-gray-600">Access to Azure services in your VNet (IaaS, PaaS)</p>
+                        </div>
+                        <div class="service-card">
+                            <h4 class="font-semibold">Microsoft Peering</h4>
+                            <p class="text-sm text-gray-600">Access to Microsoft services (Office 365, Dynamics 365)</p>
+                        </div>
+                        <div class="service-card">
+                            <h4 class="font-semibold">Public Peering (Deprecated)</h4>
+                            <p class="text-sm text-gray-600">Replaced by Microsoft peering</p>
+                        </div>
+                    </div>
+                    
+                    <div class="code-block">
+# Create ExpressRoute circuit
+az network express-route create \
+  --name MyExpressRoute \
+  --resource-group MyResourceGroup \
+  --location eastus \
+  --bandwidth 100 \
+  --peering-location "Washington DC" \
+  --provider "Equinix" \
+  --sku-tier Standard
+
+# Configure private peering
+az network express-route peering create \
+  --name AzurePrivatePeering \
+  --circuit-name MyExpressRoute \
+  --resource-group MyResourceGroup \
+  --peering-type AzurePrivatePeering \
+  --primary-peer-subnet 192.168.1.0/30 \
+  --secondary-peer-subnet 192.168.2.0/30 \
+  --vlan-id 100 \
+  --peer-asn 65001
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Virtual WAN Section -->
+        <div class="content-section fade-in-up">
+            <h2 class="text-2xl font-bold mb-6">Azure Virtual WAN</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <p class="mb-4">
+                        Azure Virtual WAN is a networking service that brings together many networking, security, 
+                        and routing functionalities into a single operational interface.
+                    </p>
+                    
+                    <div class="service-card">
+                        <h4 class="font-semibold mb-2">Virtual WAN Components</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong>Virtual WAN Hub:</strong> Central connectivity point</li>
+                            <li><strong>Hub VNet Connection:</strong> Connect VNets to hub</li>
+                            <li><strong>Site-to-site VPN:</strong> Branch office connectivity</li>
+                            <li><strong>ExpressRoute:</strong> Dedicated connectivity</li>
+                            <li><strong>Point-to-site VPN:</strong> Remote user access</li>
+                            <li><strong>Secured Virtual Hub:</strong> Built-in security</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="service-card">
+                        <h4 class="font-semibold mb-2">Virtual WAN Benefits</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Simplified network architecture</li>
+                            <li>Automated hub-to-hub connectivity</li>
+                            <li>Integrated security services</li>
+                            <li>Global network optimization</li>
+                            <li>Centralized management</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Virtual WAN Architecture</h3>
+                    <div class="network-diagram" id="vwantopology"></div>
+                    <p class="mt-4 text-sm text-gray-600">
+                        Virtual WAN hub-and-spoke architecture with multiple connectivity options
+                    </p>
+                    
+                    <div class="code-block">
+# Create Virtual WAN
+az network vwan create \
+  --name MyVirtualWAN \
+  --resource-group MyResourceGroup \
+  --location eastus \
+  --type Standard
+
+# Create Virtual Hub
+az network vhub create \
+  --name MyVirtualHub \
+  --resource-group MyResourceGroup \
+  --location eastus \
+  --address-prefix 10.0.0.0/16 \
+  --vwan MyVirtualWAN
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Questions -->
+        <div class="content-section fade-in-up">
+            <h2 class="text-2xl font-bold mb-6">Practice Questions</h2>
+            
+            <div class="practice-question">
+                <div class="mb-4">
+                    <span class="inline-block bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">VPN Gateway</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-4">
+                    You need to support 2 Gbps of VPN traffic with active-active mode. Which VPN Gateway SKU should you choose?
+                </h3>
+                <div class="space-y-2">
+                    <div class="option" data-correct="false">A) VpnGw2</div>
+                    <div class="option" data-correct="true">B) VpnGw4</div>
+                    <div class="option" data-correct="false">C) VpnGw3</div>
+                    <div class="option" data-correct="false">D) VpnGw1</div>
+                </div>
+                <button class="submit-answer mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50" disabled>
+                    Submit Answer
+                </button>
+                <div class="explanation">
+                    <strong>Correct!</strong> VpnGw4 supports up to 2.5 Gbps bandwidth and includes active-active mode capability.
+                </div>
+            </div>
+            
+            <div class="practice-question">
+                <div class="mb-4">
+                    <span class="inline-block bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full">ExpressRoute</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-4">
+                    You need to access Office 365 services through ExpressRoute. Which peering type should you configure?
+                </h3>
+                <div class="space-y-2">
+                    <div class="option" data-correct="false">A) Private Peering</div>
+                    <div class="option" data-correct="true">B) Microsoft Peering</div>
+                    <div class="option" data-correct="false">C) Public Peering</div>
+                    <div class="option" data-correct="false">D) Global Peering</div>
+                </div>
+                <button class="submit-answer mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50" disabled>
+                    Submit Answer
+                </button>
+                <div class="explanation">
+                    <strong>Correct!</strong> Microsoft peering provides access to Microsoft services including Office 365, Dynamics 365, and other SaaS services.
+                </div>
+            </div>
+            
+            <div class="practice-question">
+                <div class="mb-4">
+                    <span class="inline-block bg-orange-100 text-orange-800 text-sm px-3 py-1 rounded-full">Virtual WAN</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-4">
+                    Your organization has multiple branch offices and wants simplified network management with built-in security. 
+                    What should you implement?
+                </h3>
+                <div class="space-y-2">
+                    <div class="option" data-correct="false">A) Multiple VPN Gateways</div>
+                    <div class="option" data-correct="false">B) ExpressRoute Circuits</div>
+                    <div class="option" data-correct="true">C) Azure Virtual WAN</div>
+                    <div class="option" data-correct="false">D) VNet Peering</div>
+                </div>
+                <button class="submit-answer mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50" disabled>
+                    Submit Answer
+                </button>
+                <div class="explanation">
+                    <strong>Correct!</strong> Azure Virtual WAN provides a centralized hub for branch connectivity with integrated security and simplified management.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-gray-400">
+                    © 2024 AZ-700 Study Guide. Built for Azure Network Engineer Associate certification preparation.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="main.js"></script>
+    <script>
+        // Initialize VPN topology diagram
+        document.addEventListener('DOMContentLoaded', function() {
+            const vpnDiagram = document.getElementById('vpn-topology');
+            if (vpnDiagram) {
+                const chart = echarts.init(vpnDiagram);
+                
+                const option = {
+                    backgroundColor: 'transparent',
+                    series: [{
+                        type: 'graph',
+                        layout: 'force',
+                        animation: true,
+                        roam: true,
+                        focusNodeAdjacency: true,
+                        force: {
+                            repulsion: 800,
+                            edgeLength: 150
+                        },
+                        data: [
+                            { name: 'Azure VNet\n10.0.0.0/16', x: 0, y: 0, symbolSize: 80, itemStyle: { color: '#0078D4' } },
+                            { name: 'VPN Gateway\n10.0.0.5', x: 0, y: 100, symbolSize: 60, itemStyle: { color: '#107C10' } },
+                            { name: 'On-premises\n192.168.0.0/24', x: -200, y: 200, symbolSize: 70, itemStyle: { color: '#FF8C00' } },
+                            { name: 'Branch Office\n10.1.0.0/24', x: 200, y: 200, symbolSize: 70, itemStyle: { color: '#FF8C00' } },
+                            { name: 'Client 1', x: -100, y: 300, symbolSize: 40, itemStyle: { color: '#00BCF2' } },
+                            { name: 'Client 2', x: 100, y: 300, symbolSize: 40, itemStyle: { color: '#00BCF2' } }
+                        ],
+                        links: [
+                            { source: 'Azure VNet\n10.0.0.0/16', target: 'VPN Gateway\n10.0.0.5' },
+                            { source: 'VPN Gateway\n10.0.0.5', target: 'On-premises\n192.168.0.0/24' },
+                            { source: 'VPN Gateway\n10.0.0.5', target: 'Branch Office\n10.1.0.0/24' },
+                            { source: 'VPN Gateway\n10.0.0.5', target: 'Client 1' },
+                            { source: 'VPN Gateway\n10.0.0.5', target: 'Client 2' }
+                        ],
+                        label: {
+                            show: true,
+                            position: 'bottom',
+                            fontSize: 10,
+                            color: '#2D3748'
+                        },
+                        lineStyle: {
+                            color: '#0078D4',
+                            width: 2,
+                            curveness: 0.1
+                        }
+                    }]
+                };
+                
+                chart.setOption(option);
+                
+                window.addEventListener('resize', () => {
+                    chart.resize();
+                });
+            }
+            
+            // Initialize Virtual WAN topology
+            const vwanDiagram = document.getElementById('vwantopology');
+            if (vwanDiagram) {
+                const vwanChart = echarts.init(vwanDiagram);
+                
+                const vwanOption = {
+                    backgroundColor: 'transparent',
+                    series: [{
+                        type: 'graph',
+                        layout: 'force',
+                        animation: true,
+                        roam: true,
+                        focusNodeAdjacency: true,
+                        force: {
+                            repulsion: 1000,
+                            edgeLength: 180
+                        },
+                        data: [
+                            { name: 'Virtual Hub\n(East US)', x: 0, y: 0, symbolSize: 80, itemStyle: { color: '#0078D4' } },
+                            { name: 'VNet 1\n10.1.0.0/16', x: -150, y: -80, symbolSize: 60, itemStyle: { color: '#00BCF2' } },
+                            { name: 'VNet 2\n10.2.0.0/16', x: 150, y: -80, symbolSize: 60, itemStyle: { color: '#00BCF2' } },
+                            { name: 'Branch 1\n192.168.1.0/24', x: -200, y: 100, symbolSize: 50, itemStyle: { color: '#FF8C00' } },
+                            { name: 'Branch 2\n192.168.2.0/24', x: 200, y: 100, symbolSize: 50, itemStyle: { color: '#FF8C00' } },
+                            { name: 'ExpressRoute\nCircuit', x: 0, y: 150, symbolSize: 50, itemStyle: { color: '#107C10' } }
+                        ],
+                        links: [
+                            { source: 'Virtual Hub\n(East US)', target: 'VNet 1\n10.1.0.0/16' },
+                            { source: 'Virtual Hub\n(East US)', target: 'VNet 2\n10.2.0.0/16' },
+                            { source: 'Virtual Hub\n(East US)', target: 'Branch 1\n192.168.1.0/24' },
+                            { source: 'Virtual Hub\n(East US)', target: 'Branch 2\n192.168.2.0/24' },
+                            { source: 'Virtual Hub\n(East US)', target: 'ExpressRoute\nCircuit' }
+                        ],
+                        label: {
+                            show: true,
+                            position: 'bottom',
+                            fontSize: 10,
+                            color: '#2D3748'
+                        },
+                        lineStyle: {
+                            color: '#0078D4',
+                            width: 2,
+                            curveness: 0.1
+                        }
+                    }]
+                };
+                
+                vwanChart.setOption(vwanOption);
+                
+                window.addEventListener('resize', () => {
+                    vwanChart.resize();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

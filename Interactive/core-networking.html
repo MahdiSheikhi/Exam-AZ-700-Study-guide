@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Core Networking Infrastructure - AZ-700 Study Guide</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    
+    <style>
+        :root {
+            --azure-blue: #0078D4;
+            --deep-navy: #1B4F72;
+            --bright-cyan: #00BCF2;
+            --light-gray: #F8F9FA;
+            --charcoal: #2D3748;
+            --success-green: #107C10;
+            --warning-orange: #FF8C00;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: var(--charcoal);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--azure-blue) 0%, var(--deep-navy) 100%);
+            color: white;
+            padding: 80px 0 60px;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            margin: 24px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .concept-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            border-left: 4px solid var(--azure-blue);
+        }
+        
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .network-diagram {
+            width: 100%;
+            height: 300px;
+            border-radius: 8px;
+            background: white;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .comparison-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .practice-question {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 16px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .option:hover {
+            border-color: var(--azure-blue);
+            background: #e3f2fd;
+        }
+        
+        .option.selected {
+            border-color: var(--azure-blue);
+            background: var(--azure-blue);
+            color: white;
+        }
+        
+        .option.correct {
+            border-color: var(--success-green);
+            background: var(--success-green);
+            color: white;
+        }
+        
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #dc3545;
+            color: white;
+        }
+        
+        .explanation {
+            display: none;
+            background: #f0f8ff;
+            border-left: 4px solid var(--azure-blue);
+            padding: 16px;
+            margin-top: 16px;
+            border-radius: 8px;
+        }
+        
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .tab-container {
+            margin: 24px 0;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .tab-button {
+            padding: 12px 24px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .tab-button.active {
+            background: var(--azure-blue);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .breadcrumb {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-xl font-bold text-gray-900">AZ-700 Study Guide</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
+                    <a href="core-networking.html" class="text-blue-600 hover:text-blue-800 font-medium">Core Networking</a>
+                    <a href="connectivity.html" class="text-gray-700 hover:text-blue-600 font-medium">Connectivity</a>
+                    <a href="application-delivery.html" class="text-gray-700 hover:text-blue-600 font-medium">App Delivery</a>
+                    <a href="security.html" class="text-gray-700 hover:text-blue-600 font-medium">Security</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center fade-in-up">
+                <h1 class="text-4xl font-bold mb-4">Core Networking Infrastructure</h1>
+                <p class="text-xl text-gray-200 max-w-3xl mx-auto">
+                    Master the fundamentals of Azure networking including Virtual Networks, IP addressing, 
+                    Network Security Groups, routing, and monitoring. This section represents 25-30% of the AZ-700 exam.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Breadcrumb -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+        <div class="breadcrumb">
+            <nav class="flex" aria-label="Breadcrumb">
+                <ol class="flex items-center space-x-4">
+                    <li><a href="index.html" class="text-gray-500 hover:text-blue-600">Home</a></li>
+                    <li><span class="text-gray-400">/</span></li>
+                    <li><span class="text-gray-900 font-medium">Core Networking Infrastructure</span></li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Virtual Networks Section -->
+        <div class="content-section fade-in-up">
+            <h2 class="text-2xl font-bold mb-6">Virtual Networks (VNets)</h2>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" data-tab="vnet-basics">Basics</button>
+                    <button class="tab-button" data-tab="vnet-architecture">Architecture</button>
+                    <button class="tab-button" data-tab="vnet-best-practices">Best Practices</button>
+                </div>
+                
+                <div id="vnet-basics" class="tab-content active">
+                    <h3 class="text-xl font-semibold mb-4">Virtual Network Fundamentals</h3>
+                    <p class="mb-4">
+                        Azure Virtual Network (VNet) is the fundamental building block for your private network in Azure. 
+                        It enables Azure resources to securely communicate with each other, the internet, and on-premises networks.
+                    </p>
+                    
+                    <div class="concept-card">
+                        <h4 class="font-semibold mb-2">Key Concepts</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong>Address Space:</strong> Custom private IP address space using public and private (RFC 1918) addresses</li>
+                            <li><strong>Subnets:</strong> Segments of the virtual network address space</li>
+                            <li><strong>Regions:</strong> VNets are scoped to a single region/location</li>
+                            <li><strong>Subscriptions:</strong> VNets are scoped to a subscription</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="code-block">
+# Azure CLI - Create Virtual Network
+az network vnet create \
+  --name MyVNet \
+  --resource-group MyResourceGroup \
+  --location eastus \
+  --address-prefix 10.0.0.0/16 \
+  --subnet-name MySubnet \
+  --subnet-prefix 10.0.1.0/24
+                    </div>
+                </div>
+                
+                <div id="vnet-architecture" class="tab-content">
+                    <h3 class="text-xl font-semibold mb-4">VNet Architecture Patterns</h3>
+                    <div class="network-diagram" id="vnet-arch-diagram"></div>
+                    <p class="mt-4">
+                        Common VNet architectures include hub-and-spoke, mesh, and hybrid configurations. 
+                        The diagram above shows a typical hub-and-spoke topology with centralized services.
+                    </p>
+                </div>
+                
+                <div id="vnet-best-practices" class="tab-content">
+                    <h3 class="text-xl font-semibold mb-4">VNet Design Best Practices</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="concept-card">
+                            <h4 class="font-semibold mb-2">Address Space Planning</h4>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Use non-overlapping address spaces</li>
+                                <li>Reserve address space for future growth</li>
+                                <li>Plan for multiple environments (dev, test, prod)</li>
+                                <li>Consider on-premises network integration</li>
+                            </ul>
+                        </div>
+                        <div class="concept-card">
+                            <h4 class="font-semibold mb-2">Subnet Design</h4>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Use large subnets for flexibility</li>
+                                <li>Reserve space for Azure services</li>
+                                <li>Plan for subnet delegation</li>
+                                <li>Consider security boundaries</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- IP Addressing Section -->
+        <div class="content-section fade-in-up">
+            <h2 class="text-2xl font-bold mb-6">IP Addressing and Subnetting</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Private IP Address Ranges</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Range</th>
+                                <th>Subnet Mask</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Class A</td>
+                                <td>10.0.0.0 - 10.255.255.255</td>
+                                <td>255.0.0.0 (/8)</td>
+                            </tr>
+                            <tr>
+                                <td>Class B</td>
+                                <td>172.16.0.0 - 172.31.255.255</td>
+                                <td>255.255.0.0 (/16)</td>
+                            </tr>
+                            <tr>
+                                <td>Class C</td>
+                                <td>192.168.0.0 - 192.168.255.255</td>
+                                <td>255.255.255.0 (/24)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Subnetting Example</h3>
+                    <div class="concept-card">
+                        <p class="mb-2"><strong>VNet Address Space:</strong> 10.0.0.0/16</p>
+                        <p class="mb-2"><strong>Total IPs:</strong> 65,536</p>
+                        <p class="mb-2"><strong>Usable IPs:</strong> 65,534</p>
+                        
+                        <h4 class="font-semibold mt-4 mb-2">Subnet Allocation</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Web Tier: 10.0.1.0/24 (256 IPs)</li>
+                            <li>App Tier: 10.0.2.0/24 (256 IPs)</li>
+                            <li>Data Tier: 10.0.3.0/24 (256 IPs)</li>
+                            <li>Gateway Subnet: 10.0.0.0/24 (256 IPs)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Network Security Groups -->
+        <div class="content-section fade-in-up">
+            <h2 class="text-2xl font-bold mb-6">Network Security Groups (NSGs)</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2">
+                    <p class="mb-4">
+                        Network Security Groups (NSGs) are Azure's basic network security feature. 
+                        They act as a basic firewall, allowing or denying traffic based on 5-tuple rules.
+                    </p>
+                    
+                    <div class="concept-card">
+                        <h4 class="font-semibold mb-2">NSG Rule Components</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong>Source IP:</strong> Source IP address or range</li>
+                            <li><strong>Source Port:</strong> Source port or range</li>
+                            <li><strong>Destination IP:</strong> Destination IP address or range</li>
+                            <li><strong>Destination Port:</strong> Destination port or range</li>
+                            <li><strong>Protocol:</strong> TCP, UDP, or Any</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="code-block">
+# Azure CLI - Create NSG and add rules
+az network nsg create \
+  --name MyNsg \
+  --resource-group MyResourceGroup \
+  --location eastus
+
+# Add inbound rule for HTTP
+az network nsg rule create \
+  --name AllowHTTP \
+  --nsg-name MyNsg \
+  --resource-group MyResourceGroup \
+  --priority 100 \
+  --direction Inbound \
+  --access Allow \
+  --protocol Tcp \
+  --source-address-prefix '*' \
+  --source-port-range '*' \
+  --destination-address-prefix '*' \
+  --destination-port-range 80
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">NSG Rule Priority</h3>
+                    <div class="space-y-2">
+                        <div class="bg-green-100 p-3 rounded">
+                            <div class="font-semibold">Priority 100</div>
+                            <div class="text-sm">Allow HTTPS from Any</div>
+                        </div>
+                        <div class="bg-green-100 p-3 rounded">
+                            <div class="font-semibold">Priority 110</div>
+                            <div class="text-sm">Allow HTTP from Any</div>
+                        </div>
+                        <div class="bg-red-100 p-3 rounded">
+                            <div class="font-semibold">Priority 4000</div>
+                            <div class="text-sm">Deny All Inbound</div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">
+                        Lower numbers = Higher priority. Rules are processed in priority order.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- User-Defined Routes -->
+        <div class="content-section fade-in-up">
+            <h2 class="text-2xl font-bold mb-6">User-Defined Routes (UDRs)</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <p class="mb-4">
+                        User-Defined Routes (UDRs) allow you to customize traffic routing within your VNet. 
+                        They override Azure's default routing behavior.
+                    </p>
+                    
+                    <div class="concept-card">
+                        <h4 class="font-semibold mb-2">Common UDR Scenarios</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Force tunneling through NVA</li>
+                            <li>Route traffic between spokes via hub</li>
+                            <li>Direct internet traffic through firewall</li>
+                            <li>Implement custom routing policies</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="code-block">
+# Azure CLI - Create Route Table and UDR
+az network route-table create \
+  --name MyRouteTable \
+  --resource-group MyResourceGroup \
+  --location eastus
+
+# Add route to force internet traffic through NVA
+az network route-table route create \
+  --name ForceInternetTraffic \
+  --route-table-name MyRouteTable \
+  --resource-group MyResourceGroup \
+  --address-prefix 0.0.0.0/0 \
+  --next-hop-type VirtualAppliance \
+  --next-hop-ip-address 10.0.0.4
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Azure Default Routes</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Destination</th>
+                                <th>Next Hop</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Within VNet</td>
+                                <td>Direct</td>
+                            </tr>
+                            <tr>
+                                <td>On-premises (VPN)</td>
+                                <td>VPN Gateway</td>
+                            </tr>
+                            <tr>
+                                <td>Internet</td>
+                                <td>Internet</td>
+                            </tr>
+                            <tr>
+                                <td>Azure Services</td>
+                                <td>Virtual Network</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Network Monitoring -->
+        <div class="content-section fade-in-up">
+            <h2 class="text-2xl font-bold mb-6">Network Monitoring and Diagnostics</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="concept-card">
+                    <h4 class="font-semibold mb-2">Network Watcher</h4>
+                    <p class="text-sm text-gray-600 mb-2">
+                        Comprehensive network monitoring and diagnostic tool for Azure networks.
+                    </p>
+                    <ul class="list-disc list-inside text-sm space-y-1">
+                        <li>Topology visualization</li>
+                        <li>IP flow verification</li>
+                        <li>NSG diagnostics</li>
+                        <li>Connection troubleshoot</li>
+                    </ul>
+                </div>
+                
+                <div class="concept-card">
+                    <h4 class="font-semibold mb-2">Azure Monitor</h4>
+                    <p class="text-sm text-gray-600 mb-2">
+                        Full-stack monitoring service with metrics, logs, and alerts.
+                    </p>
+                    <ul class="list-disc list-inside text-sm space-y-1">
+                        <li>Performance metrics</li>
+                        <li>Diagnostic logs</li>
+                        <li>Custom alerts</li>
+                        <li>Workbooks and dashboards</li>
+                    </ul>
+                </div>
+                
+                <div class="concept-card">
+                    <h4 class="font-semibold mb-2">Traffic Analytics</h4>
+                    <p class="text-sm text-gray-600 mb-2">
+                        Cloud-based solution for network flow data analysis.
+                    </p>
+                    <ul class="list-disc list-inside text-sm space-y-1">
+                        <li>Flow pattern analysis</li>
+                        <li>Security insights</li>
+                        <li>Performance optimization</li>
+                        <li>Compliance reporting</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Questions -->
+        <div class="content-section fade-in-up">
+            <h2 class="text-2xl font-bold mb-6">Practice Questions</h2>
+            
+            <div class="practice-question">
+                <div class="mb-4">
+                    <span class="inline-block bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">Virtual Networks</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-4">
+                    You need to create a VNet with address space 10.0.0.0/16. How many total IP addresses are available?
+                </h3>
+                <div class="space-y-2">
+                    <div class="option" data-correct="false">A) 16,384</div>
+                    <div class="option" data-correct="false">B) 32,768</div>
+                    <div class="option" data-correct="false">C) 65,536</div>
+                    <div class="option" data-correct="true">D) 65,534</div>
+                </div>
+                <button class="submit-answer mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50" disabled>
+                    Submit Answer
+                </button>
+                <div class="explanation">
+                    <strong>Correct!</strong> A /16 network provides 65,536 total addresses, but Azure reserves 5 IP addresses per subnet, leaving 65,534 usable addresses.
+                </div>
+            </div>
+            
+            <div class="practice-question">
+                <div class="mb-4">
+                    <span class="inline-block bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full">NSG Rules</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-4">
+                    You have an NSG with the following rules: Priority 100 (Allow HTTPS), Priority 200 (Allow HTTP), Priority 3000 (Deny All). 
+                    What happens to HTTPS traffic?
+                </h3>
+                <div class="space-y-2">
+                    <div class="option" data-correct="false">A) Denied by default rule</div>
+                    <div class="option" data-correct="true">B) Allowed by priority 100 rule</div>
+                    <div class="option" data-correct="false">C) Allowed by priority 200 rule</div>
+                    <div class="option" data-correct="false">D) Processed by priority 3000 rule</div>
+                </div>
+                <button class="submit-answer mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50" disabled>
+                    Submit Answer
+                </button>
+                <div class="explanation">
+                    <strong>Correct!</strong> NSG rules are processed in priority order (lower numbers first). HTTPS traffic matches the priority 100 rule and is allowed.
+                </div>
+            </div>
+            
+            <div class="practice-question">
+                <div class="mb-4">
+                    <span class="inline-block bg-purple-100 text-purple-800 text-sm px-3 py-1 rounded-full">User-Defined Routes</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-4">
+                    You want to force all internet traffic through a Network Virtual Appliance (NVA) with IP 10.0.0.100. 
+                    What address prefix should you use in your UDR?
+                </h3>
+                <div class="space-y-2">
+                    <div class="option" data-correct="false">A) 10.0.0.0/16</div>
+                    <div class="option" data-correct="false">B) 192.168.0.0/16</div>
+                    <div class="option" data-correct="true">C) 0.0.0.0/0</div>
+                    <div class="option" data-correct="false">D) 255.255.255.255/32</div>
+                </div>
+                <button class="submit-answer mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50" disabled>
+                    Submit Answer
+                </button>
+                <div class="explanation">
+                    <strong>Correct!</strong> The 0.0.0.0/0 prefix represents all possible IP addresses (default route), which will catch all internet-bound traffic.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-gray-400">
+                    © 2024 AZ-700 Study Guide. Built for Azure Network Engineer Associate certification preparation.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="main.js"></script>
+    <script>
+        // Initialize VNet architecture diagram
+        document.addEventListener('DOMContentLoaded', function() {
+            const diagramContainer = document.getElementById('vnet-arch-diagram');
+            if (diagramContainer) {
+                const chart = echarts.init(diagramContainer);
+                
+                const option = {
+                    backgroundColor: 'transparent',
+                    series: [{
+                        type: 'graph',
+                        layout: 'force',
+                        animation: true,
+                        roam: true,
+                        focusNodeAdjacency: true,
+                        force: {
+                            repulsion: 800,
+                            edgeLength: 150
+                        },
+                        data: [
+                            { name: 'Hub VNet\n10.0.0.0/16', x: 0, y: 0, symbolSize: 80, itemStyle: { color: '#0078D4' } },
+                            { name: 'Spoke 1\n10.1.0.0/16', x: -200, y: -100, symbolSize: 60, itemStyle: { color: '#00BCF2' } },
+                            { name: 'Spoke 2\n10.2.0.0/16', x: 200, y: -100, symbolSize: 60, itemStyle: { color: '#00BCF2' } },
+                            { name: 'NVA\n10.0.0.4', x: 0, y: 100, symbolSize: 50, itemStyle: { color: '#FF8C00' } },
+                            { name: 'VPN Gateway\n10.0.0.5', x: -150, y: 150, symbolSize: 50, itemStyle: { color: '#107C10' } }
+                        ],
+                        links: [
+                            { source: 'Hub VNet\n10.0.0.0/16', target: 'Spoke 1\n10.1.0.0/16' },
+                            { source: 'Hub VNet\n10.0.0.0/16', target: 'Spoke 2\n10.2.0.0/16' },
+                            { source: 'Hub VNet\n10.0.0.0/16', target: 'NVA\n10.0.0.4' },
+                            { source: 'Hub VNet\n10.0.0.0/16', target: 'VPN Gateway\n10.0.0.5' }
+                        ],
+                        label: {
+                            show: true,
+                            position: 'bottom',
+                            fontSize: 10,
+                            color: '#2D3748'
+                        },
+                        lineStyle: {
+                            color: '#0078D4',
+                            width: 2,
+                            curveness: 0.1
+                        }
+                    }]
+                };
+                
+                chart.setOption(option);
+                
+                window.addEventListener('resize', () => {
+                    chart.resize();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

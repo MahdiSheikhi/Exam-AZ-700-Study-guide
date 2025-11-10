@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Security - AZ-700 Study Guide</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    
+    <style>
+        :root {
+            --azure-blue: #0078D4;
+            --deep-navy: #1B4F72;
+            --bright-cyan: #00BCF2;
+            --light-gray: #F8F9FA;
+            --charcoal: #2D3748;
+            --success-green: #107C10;
+            --warning-orange: #FF8C00;
+            --danger-red: #DC2626;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: var(--charcoal);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--danger-red) 0%, var(--deep-navy) 100%);
+            color: white;
+            padding: 80px 0 60px;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            margin: 24px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .service-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            border-left: 4px solid var(--danger-red);
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .comparison-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .network-diagram {
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+            background: white;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .practice-question {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 16px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .option:hover {
+            border-color: var(--azure-blue);
+            background: #e3f2fd;
+        }
+        
+        .option.selected {
+            border-color: var(--azure-blue);
+            background: var(--azure-blue);
+            color: white;
+        }
+        
+        .option.correct {
+            border-color: var(--success-green);
+            background: var(--success-green);
+            color: white;
+        }
+        
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #dc3545;
+            color: white;
+        }
+        
+        .explanation {
+            display: none;
+            background: #f0f8ff;
+            border-left: 4px solid var(--azure-blue);
+            padding: 16px;
+            margin-top: 16px;
+            border-radius: 8px;
+        }
+        
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .tab-container {
+            margin: 24px 0;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .tab-button {
+            padding: 12px 24px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .tab-button.active {
+            background: var(--danger-red);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .breadcrumb {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .security-layer {
+            background: #fef2f2;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 8px 0;
+            border-left: 4px solid var(--danger-red);
+        }
+        
+        .threat-protection {
+            background: #f0f9ff;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 8px 0;
+            border-left: 4px solid var(--azure-blue);
+        }
+        
+        .best-practice {
+            background: #f0fdf4;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 8px 0;
+            border-left: 4px solid var(--success-green);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-xl font-bold text-gray-900">AZ-700 Study Guide</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
+                    <a href="core-networking.html" class="text-gray-700 hover:text-blue-600 font-medium">Core Networking</a>
+                    <a href="connectivity.html" class="text-gray-700 hover:text-blue-600 font-medium">Connectivity</a>
+                    <a href="application-delivery.html" class="text-gray-700 hover:text-blue-600 font-medium">App Delivery</a>
+                    <a href="security.html" class="text-blue-600 hover:text-blue-800 font-medium">Security</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center fade-in-up">
+                <h1 class="text-4xl font-bold mb-4">Network Security</h1>
+                <p class="text-xl text-gray-200 max-w-3xl mx-auto">
+                    Master Azure network security including Azure Firewall, NSGs, DDoS Protection, 
+                    Private Link, and security best practices. This section represents 15-20% of the AZ-700 exam.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Breadcrumb -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+        <div class="breadcrumb">
+            <nav class="flex" aria-label="Breadcrumb">
+                <ol class="flex items-center space-x-4">
+                    <li><a href="index.html" class="text-gray-500 hover:text-blue-600">Home</a></li>
+                    <li><span class="text-gray-400">/</span></li>
+                    <li><span class="text-gray-900 font-medium">Network Security</span></li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Azure Firewall Section -->
+        <div class="content-section fade-in-up">
+            <h2 class="text-2xl font-bold mb-6">Azure Firewall</h2>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" data-tab="firewall-overview">Overview</button>
+                    <button class="tab-button" data-tab="firewall-skus">SKUs & Features</button>
+                    <button class="tab-button" data-tab="firewall-policies">Policies & Rules</button>
+                </div>
+                
+                <div id="firewall-overview" class="tab-content active">
+                    <h3 class="text-xl font-semibold mb-4">Azure Firewall Overview</h3>
+                    <p class="mb-4">
+                        Azure Firewall is a cloud-based network security service that protects your Azure Virtual Network resources. 
+                        It's a stateful firewall as a service with built-in high availability and unrestricted cloud scalability.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="security-layer">
+                            <h4 class="font-semibold mb-2">Core Capabilities</h4>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Stateful packet inspection</li>
+                                <li>Application and network rules</li>
+                                <li>Threat intelligence-based filtering</li>
+                                <li>Outbound SNAT support</li>
+                                <li>Inbound DNAT support</li>
+                                <li>Centralized policy management</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="threat-protection">
+                            <h4 class="font-semibold mb-2">Security Features</h4>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Application FQDN filtering</li>
+                                <li>Network traffic filtering rules</li>
+                                <li>Threat intelligence feeds</li>
+                                <li>TLS inspection (Premium)</li>
+                                <li>IDPS signatures (Premium)</li>
+                                <li>URL filtering (Premium)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="network-diagram" id="firewall-topology"></div>
+                    <p class="mt-4 text-sm text-gray-600">
+                        Azure Firewall architecture with hub-and-spoke topology
+                    </p>
+                </div>
+                
+                <div id="firewall-skus" class="tab-content">
+                    <h3 class="text-xl font-semibold mb-4">Azure Firewall SKUs</h3>
+                    
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Basic</th>
+                                <th>Standard</th>
+                                <th>Premium</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Stateful Firewall</td>
+                                <td>✓</td>
+                                <td>✓</td>
+                                <td>✓</td>
+                            </tr>
+                            <tr>
+                                <td>Application Rules</td>
+                                <td>✓</td>
+                                <td>✓</td>
+                                <td>✓</td>
+                            </tr>
+                            <tr>
+                                <td>Network Rules</td>
+                                <td>✓</td>
+                                <td>✓</td>
+                                <td>✓</td>
+                            </tr>
+                            <tr>
+                                <td>Threat Intelligence</td>
+                                <td>✓</td>
+                                <td>✓</td>
+                                <td>✓</td>
+                            </tr>
+                            <tr>
+                                <td>Forced Tunneling</td>
+                                <td>✓</td>
+                                <td>✓</td>
+                                <td>✓</td>
+                            </tr>
+                            <tr>
+                                <td>TLS Inspection</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>✓</td>
+                            </tr>
+                            <tr>
+                                <td>IDPS</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>✓</td>
+                            </tr>
+                            <tr>
+                                <td>URL Filtering</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>✓</td>
+                            </tr>
+                            <tr>
+                                <td>Web Categories</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>✓</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4 class="font-semibold mt-6 mb-3">Deployment Options</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="service-card">
+                            <h5 class="font-semibold">Hub Virtual Network</h5>
+                            <p class="text-sm text-gray-600">
+                                Deploy in hub VNet to secure traffic between spokes and to internet
+                            </p>
+                        </div>
+                        <div class="service-card">
+                            <h5 class="font-semibold">Secured Virtual Hub</h5>
+                            <p class="text-sm text-gray-600">
+                                Integrated with Virtual WAN for large-scale deployments
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="firewall-policies" class="tab-content">
+                    <h3 class="text-xl font-semibold mb-4">Firewall Policies and Rules</h3>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold mb-3">Rule Types</h4>
+                            <div class="space-y-3">
+                                <div class="security-layer">
+                                    <h5 class="font-semibold">Application Rules</h5>
+                                    <p class="text-sm">Control outbound HTTP/HTTPS traffic using FQDNs</p>
+                                    <ul class="list-disc list-inside text-sm mt-1">
+                                        <li>Allow/deny specific URLs</li>
+                                        <li>Support for wildcards</li>
+                                        <li>TLS inspection (Premium)</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="security-layer">
+                                    <h5 class="font-semibold">Network Rules</h5>
+                                    <p class="text-sm">Control traffic using 5-tuple (IP, port, protocol)</p>
+                                    <ul class="list-disc list-inside text-sm mt-1">
+                                        <li>Inbound and outbound rules</li>
+                                        <li>TCP, UDP, ICMP, Any protocols</li>
+                                        <li>IP ranges and ports</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="security-layer">
+                                    <h5 class="font-semibold">NAT Rules</h5>
+                                    <p class="text-sm">DNAT (Destination NAT) for inbound connections</p>
+                                    <ul class="list-disc list-inside text-sm mt-1">
+                                        <li>Port forwarding</li>
+                                        <li>IP address translation</li>
+                                        <li>Protocol translation</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold mb-3">Rule Processing Order</h4>
+                            <div class="space-y-2">
+                                <div class="best-practice">
+                                    <div class="font-semibold">1. DNAT Rules</div>
+                                    <div class="text-sm">Inbound NAT rules processed first</div>
+                                </div>
+                                <div class="best-practice">
+                                    <div class="font-semibold">2. Network Rules</div>
+                                    <div class="text-sm">Network rules processed by priority</div>
+                                </div>
+                                <div class="best-practice">
+                                    <div class="font-semibold">3. Application Rules</div>
+                                    <div class="text-sm">Application rules processed by priority</div>
+                                </div>
+                                <div class="security-layer">
+                                    <div class="font-semibold">4. Default Deny</div>
+                                    <div class="text-sm">Implicit deny if no rules match</div>
+                                </div>
+                            </div>
+                            
+                            <div class="code-block">
+# Create firewall policy
+az network firewall policy create \
+  --name MyFirewallPolicy \
+  --resource-group MyResourceGroup \
+  --location eastus
+
+# Add application rule
+az network firewall policy rule-collection-group collection rule add \
+  --collection-name AppRuleCollection \
+  --name AllowMicrosoft \
+  --policy-name MyFirewallPolicy \
+  --resource-group MyResourceGroup \
+  --rule-type ApplicationRule \
+  --target-fqdns *.microsoft.com \
+  --source-addresses 10.0.0.0/16 \
+  --protocols Http Https
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Network Security Groups -->
+        <div class="content-section fade-in-up">
+            <h2 class="text-2xl font-bold mb-6">Network Security Groups (NSGs)</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <p class="mb-4">
+                        Network Security Groups (NSGs) are Azure's basic network security feature that acts as a 
+                        simple firewall, allowing or denying traffic based on 5-tuple rules.
+                    </p>
+                    
+                    <div class="service-card">
+                        <h4 class="font-semibold mb-2">NSG Components</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong>Security Rules:</strong> Allow or deny traffic</li>
+                            <li><strong>Default Rules:</strong> Built-in rules for basic security</li>
+                            <li><strong>Application Security Groups:</strong> Group VMs by security requirements</li>
+                            <li><strong>Service Tags:</strong> Represent groups of IP addresses</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="service-card">
+                        <h4 class="font-semibold mb-2">Service Tags</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                            <div>• VirtualNetwork</div>
+                            <div>• AzureLoadBalancer</div>
+                            <div>• Internet</div>
+                            <div>• AzureTrafficManager</div>
+                            <div>• Storage</div>
+                            <div>• Sql</div>
+                            <div>• AzureKeyVault</div>
+                            <div>• AzureContainerRegistry</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">NSG Rule Structure</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Name</td>
+                                <td>Unique rule name</td>
+                                <td>AllowHTTP</td>
+                            </tr>
+                            <tr>
+                                <td>Priority</td>
+                                <td>Processing order (100-4096)</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>Source</td>
+                                <td>Source IP or range</td>
+                                <td>10.0.0.0/16</td>
+                            </tr>
+                            <tr>
+                                <td>Source Port</td>
+                                <td>Source port or range</td>
+                                <td>*</td>
+                            </tr>
+                            <tr>
+                                <td>Destination</td>
+                                <td>Destination IP or range</td>
+                                <td>*</td>
+                            </tr>
+                            <tr>
+                                <td>Destination Port</td>
+                                <td>Destination port or range</td>
+                                <td>80</td>
+                            </tr>
+                            <tr>
+                                <td>Protocol</td>
+                                <td>TCP, UDP, or Any</td>
+                                <td>TCP</td>
+                            </tr>
+                            <tr>
+                                <td>Action</td>
+                                <td>Allow or Deny</td>
+                                <td>Allow</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="code-block">
+# Create NSG
+az network nsg create \
+  --name MyNsg \
+  --resource-group MyResourceGroup \
+  --location eastus
+
+# Add security rule
+az network nsg rule create \
+  --name AllowHTTPS \
+  --nsg-name MyNsg \
+  --resource-group MyResourceGroup \
+  --priority 100 \
+  --direction Inbound \
+  --access Allow \
+  --protocol Tcp \
+  --source-address-prefix '*' \
+  --source-port-range '*' \
+  --destination-address-prefix '*' \
+  --destination-port-range 443
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DDoS Protection -->
+        <div class="content-section fade-in-up">
+            <h2 class="text-2xl font-bold mb-6">DDoS Protection</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <p class="mb-4">
+                        Azure DDoS Protection helps protect your Azure resources from distributed denial-of-service (DDoS) attacks. 
+                        It provides always-on monitoring and automatic attack mitigation.
+                    </p>
+                    
+                    <div class="threat-protection">
+                        <h4 class="font-semibold mb-2">DDoS Protection Tiers</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <h5 class="font-semibold text-sm">Basic (Free)</h5>
+                                <ul class="list-disc list-inside text-sm">
+                                    <li>Always-on traffic monitoring</li>
+                                    <li>Automatic attack mitigation</li>
+                                    <li>Basic L3/4 protection</li>
+                                    <li>Microsoft managed</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-sm">Standard (Paid)</h5>
+                                <ul class="list-disc list-inside text-sm">
+                                    <li>Enhanced L3/4 protection</li>
+                                    <li>L7 application protection</li>
+                                    <li>Cost protection</li>
+                                    <li>Attack analytics and reporting</li>
+                                    <li>DDoS rapid response support</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="service-card">
+                        <h4 class="font-semibold mb-2">Protection Types</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong>Volumetric Attacks:</strong> High-volume traffic floods</li>
+                            <li><strong>Protocol Attacks:</strong> Exploit protocol weaknesses</li>
+                            <li><strong>Resource Layer Attacks:</strong> Target application resources</li>
+                            <li><strong>Web Application Attacks:</strong> HTTP/HTTPS flood attacks</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">DDoS Protection Configuration</h3>
+                    
+                    <div class="code-block">
+# Create DDoS Protection Plan
+az network ddos-protection create \
+  --name MyDdosProtectionPlan \
+  --resource-group MyResourceGroup \
+  --location eastus
+
+# Enable DDoS Protection on VNet
+az network vnet update \
+  --name MyVNet \
+  --resource-group MyResourceGroup \
+  --ddos-protection-plan /subscriptions/.../MyDdosProtectionPlan \
+  --ddos-protection true
+                    </div>
+                    
+                    <div class="service-card">
+                        <h4 class="font-semibold mb-2">Monitoring & Alerting</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Attack metrics and analytics</li>
+                            <li>Real-time attack notifications</li>
+                            <li>Post-attack reports</li>
+                            <li>Integration with Azure Monitor</li>
+                            <li>Custom alerting rules</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="network-diagram" id="ddos-topology"></div>
+                    <p class="mt-4 text-sm text-gray-600">
+                        DDoS Protection monitoring and mitigation architecture
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Private Access Services -->
+        <div class="content-section fade-in-up">
+            <h2 class="text-2xl font-bold mb-6">Private Access to Azure Services</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Private Link</h3>
+                    <p class="mb-4">
+                        Azure Private Link enables you to access Azure PaaS services (like Azure Storage, SQL Database) 
+                        and Azure-hosted customer/partner services over a private endpoint in your virtual network.
+                    </p>
+                    
+                    <div class="service-card">
+                        <h4 class="font-semibold mb-2">Private Link Components</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong>Private Endpoint:</strong> Network interface for accessing services privately</li>
+                            <li><strong>Private Link Service:</strong> Your service behind Private Link</li>
+                            <li><strong>Private DNS Zone:</strong> DNS resolution for private endpoints</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="code-block">
+# Create private endpoint
+az network private-endpoint create \
+  --name MyPrivateEndpoint \
+  --resource-group MyResourceGroup \
+  --vnet-name MyVNet \
+  --subnet MySubnet \
+  --private-connection-resource-id /subscriptions/.../storageAccount \
+  --group-id blob
+
+# Create private DNS zone
+az network private-dns zone create \
+  --name privatelink.blob.core.windows.net \
+  --resource-group MyResourceGroup
+
+# Link DNS zone to VNet
+az network private-dns link vnet create \
+  --name MyDNSLink \
+  --resource-group MyResourceGroup \
+  --zone-name privatelink.blob.core.windows.net \
+  --virtual-network MyVNet \
+  --registration-enabled false
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Service Endpoints</h3>
+                    <p class="mb-4">
+                        Service endpoints provide secure and direct connectivity to Azure services over the Azure backbone network.
+                    </p>
+                    
+                    <div class="service-card">
+                        <h4 class="font-semibold mb-2">Service Endpoint Benefits</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Traffic stays on Azure backbone network</li>
+                            <li>Optimal routing to Azure services</li>
+                            <li>Simplified network configuration</li>
+                            <li>No public IP required for services</li>
+                            <li>Fine-grained access control</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="service-card">
+                        <h4 class="font-semibold mb-2">Supported Services</h4>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div>• Azure Storage</div>
+                            <div>• Azure SQL Database</div>
+                            <div>• Azure Cosmos DB</div>
+                            <div>• Azure Key Vault</div>
+                            <div>• Azure Container Registry</div>
+                            <div>• Azure Event Hub</div>
+                            <div>• Azure Service Bus</div>
+                            <div>• Azure App Configuration</div>
+                        </div>
+                    </div>
+                    
+                    <div class="code-block">
+# Enable service endpoint on subnet
+az network vnet subnet update \
+  --name MySubnet \
+  --vnet-name MyVNet \
+  --resource-group MyResourceGroup \
+  --service-endpoints Microsoft.Storage Microsoft.Sql
+
+# Configure service endpoint policy
+az network service-endpoint policy create \
+  --name MySEPolicy \
+  --resource-group MyResourceGroup \
+  --location eastus
+
+# Add policy definition
+az network service-endpoint policy definition create \
+  --name AllowStorage \
+  --policy-name MySEPolicy \
+  --resource-group MyResourceGroup \
+  --service Microsoft.Storage \
+  --service-resources /subscriptions/.../storageAccounts/myaccount
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Best Practices -->
+        <div class="content-section fade-in-up">
+            <h2 class="text-2xl font-bold mb-6">Security Best Practices</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="best-practice">
+                    <h4 class="font-semibold mb-2">Network Segmentation</h4>
+                    <ul class="list-disc list-inside text-sm space-y-1">
+                        <li>Use multiple subnets for different tiers</li>
+                        <li>Implement micro-segmentation</li>
+                        <li>Separate production and non-production</li>
+                        <li>Use dedicated management subnets</li>
+                    </ul>
+                </div>
+                
+                <div class="best-practice">
+                    <h4 class="font-semibold mb-2">Access Control</h4>
+                    <ul class="list-disc list-inside text-sm space-y-1">
+                        <li>Implement least privilege access</li>
+                        <li>Use RBAC for resource access</li>
+                        <li>Enable MFA for administrative access</li>
+                        <li>Regular access reviews</li>
+                    </ul>
+                </div>
+                
+                <div class="best-practice">
+                    <h4 class="font-semibold mb-2">Monitoring & Logging</h4>
+                    <ul class="list-disc list-inside text-sm space-y-1">
+                        <li>Enable NSG flow logs</li>
+                        <li>Monitor firewall logs</li>
+                        <li>Set up security alerts</li>
+                        <li>Regular security assessments</li>
+                    </ul>
+                </div>
+                
+                <div class="best-practice">
+                    <h4 class="font-semibold mb-2">Data Protection</h4>
+                    <ul class="list-disc list-inside text-sm space-y-1">
+                        <li>Encrypt data in transit</li>
+                        <li>Encrypt data at rest</li>
+                        <li>Use Azure Key Vault for secrets</li>
+                        <li>Implement secure key management</li>
+                    </ul>
+                </div>
+                
+                <div class="best-practice">
+                    <h4 class="font-semibold mb-2">Incident Response</h4>
+                    <ul class="list-disc list-inside text-sm space-y-1">
+                        <li>Document incident response plan</li>
+                        <li>Regular security drills</li>
+                        <li>Automated threat response</li>
+                        <li>Post-incident analysis</li>
+                    </ul>
+                </div>
+                
+                <div class="best-practice">
+                    <h4 class="font-semibold mb-2">Compliance</h4>
+                    <ul class="list-disc list-inside text-sm space-y-1">
+                        <li>Understand regulatory requirements</li>
+                        <li>Implement compliance controls</li>
+                        <li>Regular compliance audits</li>
+                        <li>Documentation and reporting</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Questions -->
+        <div class="content-section fade-in-up">
+            <h2 class="text-2xl font-bold mb-6">Practice Questions</h2>
+            
+            <div class="practice-question">
+                <div class="mb-4">
+                    <span class="inline-block bg-red-100 text-red-800 text-sm px-3 py-1 rounded-full">Azure Firewall</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-4">
+                    You need to inspect HTTPS traffic for threats and filter based on URLs. Which Azure Firewall SKU should you use?
+                </h3>
+                <div class="space-y-2">
+                    <div class="option" data-correct="false">A) Basic</div>
+                    <div class="option" data-correct="false">B) Standard</div>
+                    <div class="option" data-correct="true">C) Premium</div>
+                    <div class="option" data-correct="false">D) Free</div>
+                </div>
+                <button class="submit-answer mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50" disabled>
+                    Submit Answer
+                </button>
+                <div class="explanation">
+                    <strong>Correct!</strong> Azure Firewall Premium includes TLS inspection, IDPS signatures, and URL filtering capabilities required for HTTPS inspection.
+                </div>
+            </div>
+            
+            <div class="practice-question">
+                <div class="mb-4">
+                    <span class="inline-block bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">Private Link</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-4">
+                    You want to access Azure Storage from your VNet without going over the public internet. What should you implement?
+                </h3>
+                <div class="space-y-2">
+                    <div class="option" data-correct="true">A) Private Endpoint</div>
+                    <div class="option" data-correct="false">B) Service Endpoint</div>
+                    <div class="option" data-correct="false">C) VPN Gateway</div>
+                    <div class="option" data-correct="false">D) ExpressRoute</div>
+                </div>
+                <button class="submit-answer mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50" disabled>
+                    Submit Answer
+                </button>
+                <div class="explanation">
+                    <strong>Correct!</strong> Private Endpoint provides a private IP address for accessing Azure Storage from your VNet over the Azure backbone network.
+                </div>
+            </div>
+            
+            <div class="practice-question">
+                <div class="mb-4">
+                    <span class="inline-block bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full">DDoS Protection</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-4">
+                    Your application is experiencing a volumetric DDoS attack. Which feature provides automatic mitigation?
+                </h3>
+                <div class="space-y-2">
+                    <div class="option" data-correct="true">A) DDoS Protection Basic</div>
+                    <div class="option" data-correct="false">B) NSG Rules</div>
+                    <div class="option" data-correct="false">C) Azure Firewall</div>
+                    <div class="option" data-correct="false">D) Application Gateway WAF</div>
+                </div>
+                <button class="submit-answer mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50" disabled>
+                    Submit Answer
+                </button>
+                <div class="explanation">
+                    <strong>Correct!</strong> DDoS Protection Basic provides always-on monitoring and automatic attack mitigation for volumetric attacks at no additional cost.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-gray-400">
+                    © 2024 AZ-700 Study Guide. Built for Azure Network Engineer Associate certification preparation.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="main.js"></script>
+    <script>
+        // Initialize Firewall topology diagram
+        document.addEventListener('DOMContentLoaded', function() {
+            const fwDiagram = document.getElementById('firewall-topology');
+            if (fwDiagram) {
+                const chart = echarts.init(fwDiagram);
+                
+                const option = {
+                    backgroundColor: 'transparent',
+                    series: [{
+                        type: 'graph',
+                        layout: 'force',
+                        animation: true,
+                        roam: true,
+                        focusNodeAdjacency: true,
+                        force: {
+                            repulsion: 800,
+                            edgeLength: 150
+                        },
+                        data: [
+                            { name: 'Internet', x: 0, y: -150, symbolSize: 70, itemStyle: { color: '#DC2626' } },
+                            { name: 'Azure Firewall\n10.0.0.4', x: 0, y: -50, symbolSize: 80, itemStyle: { color: '#FF8C00' } },
+                            { name: 'Hub VNet\n10.0.0.0/16', x: 0, y: 50, symbolSize: 90, itemStyle: { color: '#0078D4' } },
+                            { name: 'Spoke 1\n10.1.0.0/16', x: -150, y: 150, symbolSize: 60, itemStyle: { color: '#00BCF2' } },
+                            { name: 'Spoke 2\n10.2.0.0/16', x: 150, y: 150, symbolSize: 60, itemStyle: { color: '#00BCF2' } },
+                            { name: 'On-premises\n192.168.0.0/16', x: -200, y: -50, symbolSize: 60, itemStyle: { color: '#107C10' } }
+                        ],
+                        links: [
+                            { source: 'Internet', target: 'Azure Firewall\n10.0.0.4' },
+                            { source: 'Azure Firewall\n10.0.0.4', target: 'Hub VNet\n10.0.0.0/16' },
+                            { source: 'Hub VNet\n10.0.0.0/16', target: 'Spoke 1\n10.1.0.0/16' },
+                            { source: 'Hub VNet\n10.0.0.0/16', target: 'Spoke 2\n10.2.0.0/16' },
+                            { source: 'On-premises\n192.168.0.0/16', target: 'Hub VNet\n10.0.0.0/16' }
+                        ],
+                        label: {
+                            show: true,
+                            position: 'bottom',
+                            fontSize: 10,
+                            color: '#2D3748'
+                        },
+                        lineStyle: {
+                            color: '#0078D4',
+                            width: 2,
+                            curveness: 0.1
+                        }
+                    }]
+                };
+                
+                chart.setOption(option);
+                
+                window.addEventListener('resize', () => {
+                    chart.resize();
+                });
+            }
+            
+            // Initialize DDoS topology
+            const ddosDiagram = document.getElementById('ddos-topology');
+            if (ddosDiagram) {
+                const ddosChart = echarts.init(ddosDiagram);
+                
+                const ddosOption = {
+                    backgroundColor: 'transparent',
+                    series: [{
+                        type: 'graph',
+                        layout: 'force',
+                        animation: true,
+                        roam: true,
+                        focusNodeAdjacency: true,
+                        force: {
+                            repulsion: 1000,
+                            edgeLength: 180
+                        },
+                        data: [
+                            { name: 'DDoS\nAttackers', x: -200, y: -100, symbolSize: 70, itemStyle: { color: '#DC2626' } },
+                            { name: 'DDoS\nProtection', x: 0, y: -100, symbolSize: 80, itemStyle: { color: '#107C10' } },
+                            { name: 'Azure\nResources', x: 200, y: -100, symbolSize: 70, itemStyle: { color: '#0078D4' } },
+                            { name: 'Monitoring\n& Analytics', x: 0, y: 50, symbolSize: 60, itemStyle: { color: '#FF8C00' } },
+                            { name: 'Security\nAlerts', x: 0, y: 150, symbolSize: 50, itemStyle: { color: '#00BCF2' } }
+                        ],
+                        links: [
+                            { source: 'DDoS\nAttackers', target: 'DDoS\nProtection' },
+                            { source: 'DDoS\nProtection', target: 'Azure\nResources' },
+                            { source: 'DDoS\nProtection', target: 'Monitoring\n& Analytics' },
+                            { source: 'Monitoring\n& Analytics', target: 'Security\nAlerts' }
+                        ],
+                        label: {
+                            show: true,
+                            position: 'bottom',
+                            fontSize: 10,
+                            color: '#2D3748'
+                        },
+                        lineStyle: {
+                            color: '#0078D4',
+                            width: 2,
+                            curveness: 0.1
+                        }
+                    }]
+                };
+                
+                ddosChart.setOption(ddosOption);
+                
+                window.addEventListener('resize', () => {
+                    ddosChart.resize();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
